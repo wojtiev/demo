@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+    <title>Search employee by last name</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <span class="navbar-brand px-3">Employee Manager Page</span>
+    <div class="navbar" id="navNav">
+        <ul class="navbar-nav">
+            <li>
+                <a class="nav-link active" href="/">Employee List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/dodaj">Add Employee</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="d-flex justify-content-center p-3">
+    <form th:action="@{/szukajPoNazwisku}" method="post">
+        Szukaj po nazwisku<br>
+        <input type="text" name="lastName" placeholder="Insert lastname" id="userInput" />
+        <input id="bnt" class="btn btn-primary" type="submit" value="Submit">
+    </form>
+</div>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>S.N</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Position</th>
+            <th>Salary</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry, stat : ${employeeManager.getEmployees()}">
+            <td th:text="${stat.index +1}"></td>
+            <td th:text="${entry.value.firstName}"></td>
+            <td th:text="${entry.value.lastName}"></td>
+            <td th:text="${entry.value.position}"></td>
+            <td th:text="${entry.value.salary}"></td>
+            <td><a th:href="@{/edytuj/{id}(id=${entry.value.employeeID})}"
+                   class="btn btn-primary">Edit</a></td>
+            <td>
+                <form th:action="@{/usun/{id}(id=${entry.value.employeeID})}" method="post" onsubmit="return confirm('Jesteś tego pewien?')">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
